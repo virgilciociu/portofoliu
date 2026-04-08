@@ -1,34 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ro">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Fron to End Programmer Virgil Ciociu</title>
+    <title>Programator Front-End — Virgil C.</title>
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <!-- IBM Plex Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    
-    <!-- CSS Stylesheets -->
-    <link rel="stylesheet" href="css/looks.css" />
-    <link rel="stylesheet" href="css/style.css" /> <!-- Am adăugat referința aici -->
-    
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
   </head>
 
   <body>
-    <!-- Welcome Section -->
+
+    <!-- Toast notificare copiere email -->
+    <div class="toast" id="toast">✓ Email copiat în clipboard!</div>
+
+    <!-- ========== SECȚIUNEA BINE AI VENIT ========== -->
     <div class="grid">
       <div data-full>
-        <h1><span>Virgil</span> <span>Ciociu</span></h1>
+        <h1><span>Virgil</span> <span>C.</span></h1>
       </div>
 
       <div data-full>
-        <h2><span>Front-End</span> <span>Operator</span></h2>
+        <h2><span>Programator</span>&nbsp;<span>Front-End</span></h2>
       </div>
 
       <div data-full>
@@ -36,7 +39,7 @@
       </div>
 
       <div data-full>
-        <h3><span>About</span> <span>me</span></h3>
+        <h3><span>Despre</span> <span>mine</span></h3>
       </div>
 
       <div data-full>
@@ -46,25 +49,18 @@
       <div data-full>
         <div class="shadow-box">
           <p class="description">
-            I am a dedicated Front-End Programmer with a passion for creating websites.You can access all my media accounts here so we can get in contact. Pressint the icons in Let's Connect sections you cand see all my acconts including the GitHub where you can see all my live websites (100 plus).
+            Cu peste <strong style="color:#82cfff;">100 de pagini web</strong> realizate și un punctaj de 
+            <strong style="color:#82cfff;">4,8 din 5 pe Trustpilot</strong>, Virgil C. îți va crea 
+            exact site-ul pe care ți-l dorești — ba și mai mult. Accesează conturile mele de social media 
+            pentru a lua legătura.
           </p>
+          <div class="trustpilot-badge">
+            <span class="stars">★★★★★</span>
+            <span class="rating-text">4,8 / 5 · Trustpilot</span>
+          </div>
         </div>
       </div>
 
-      <div data-full>
-        <div class="break-16"></div>
-      </div>
-
-      <div data-full>
-        <a href="cv_virgil_ciociu.pdf" download>
-          <button class="download-btn">
-            <img src="image/download.png" alt="download icon" />
-            <span>Download My CV</span>
-          </button>
-        </a>
-        
-        
-      </div>
       <div data-full>
         <div class="break-52"></div>
       </div>
@@ -78,50 +74,67 @@
       </div>
     </div>
 
-    <!-- Connect Section -->
+    <!-- ========== SECȚIUNEA CONECTEAZĂ-TE ========== -->
     <div class="grid" id="connect">
       <div data-full>
         <div class="break-52"></div>
       </div>
 
       <div data-full>
-        <h3><span>Let's</span> <span>connect</span></h3>
+        <h3><span>Hai să</span> <span>ne conectăm</span></h3>
       </div>
 
       <div data-full>
         <div class="break-16"></div>
       </div>
 
-      <div data-row="4" data-column="4">
-        <div
-          class="image-square"
-          style="background-image: url(image/avatar-marian-zburlea.jpg)"
-        ></div>
-      </div>
+      <div data-full>
+        <div class="grid-inner" id="connect-inner">
 
-      <a href="https://github.com/Adrian01C" target="_blank">
-        <div class="social__icon social__icon--purple" style="background-image: url(image/github.png)"></div>
-      </a>
-      
-      <a href="https://www.hostinger.com/uk/tutorials/wp-content/uploads/sites/51/2024/09/Paper-Toilet-homepage.png" target="_blank">
-        <div class="social__icon social__icon--purple" style="background-image: url(image/stack-overflow.png)"></div>
-      </a>
-      
-      <a href="https://x.com/adrian_ciociu" target="_blank">
-        <div class="social__icon social__icon--green" style="background-image: url(image/twitter.png)"></div>
-      </a>
-      
-      <a href="https://www.youtube.com/@adrianciociu9261" target="_blank">
-        <div class="social__icon social__icon--red" style="background-image: url(image/youtube.png)"></div>
-      </a>
-      
-      <a href="https://www.hostinger.com/uk/tutorials/wp-content/uploads/sites/51/2024/09/Paper-Toilet-homepage.png" target="_blank">
-        <div class="social__icon social__icon--orange" style="background-image: url(image/skype.png)"></div>
-      </a>
-      
-      <a href="https://www.linkedin.com/in/virgil-adrian-ciociu-3a6122b4/" target="_blank">
-        <div class="social__icon social__icon--yellow" style="background-image: url(image/linkedin.png)"></div>
-      </a>
+          <!-- Stânga: Fotografie -->
+          <div
+            class="connect-photo"
+            style="background-image: url(image/avatar-marian-zburlea.jpg)"
+          ></div>
+
+          <!-- Dreapta: Text + iconuri + email -->
+          <div class="connect-right">
+            <div class="shadow-box connect-box">
+              <p class="description">
+                 
+                Experiența mea acoperă site-uri de prezentare, portofolii, 
+                landing pages și aplicații web — toate optimizate pentru 
+                mobil și tabletă.
+                Scrie-mi și hai să construim împreună ceva remarcabil.
+              </p>
+            </div>
+
+            <div class="connect-icons">
+              <!-- Facebook -->
+              <a href="https://www.facebook.com/AdrianCiociu1" target="_blank" class="social-icon-wrapper">
+                <div class="social__icon" style="background-image: url(image/facebook.png)"></div>
+                <span class="social-icon-label">Facebook</span>
+              </a>
+
+              <!-- LinkedIn → wip.jpg -->
+              <a href="image/wip.jpg" target="_blank" class="social-icon-wrapper">
+                <div class="social__icon" style="background-image: url(image/linkedin.png)"></div>
+                <span class="social-icon-label">LinkedIn</span>
+              </a>
+            </div>
+
+            <!-- Buton email cu copy-to-clipboard -->
+            <button class="email-btn" id="emailBtn" onclick="copyEmail()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="4" width="20" height="16" rx="2"/>
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+              </svg>
+              <span id="emailBtnText">ciociu.adr@gmail.com</span>
+            </button>
+
+          </div>
+        </div>
+      </div>
 
       <div data-full>
         <div class="break-52"></div>
@@ -136,13 +149,70 @@
       </div>
     </div>
 
+    <!-- ========== FOOTER ========== -->
     <footer>
       <nav class="footer__link--wrapper">
-        <a class="footer__link" href="#">About me</a>
-        <a class="footer__link" href="#connect">Let's connect</a>
-        <a class="footer__link" href="#skills">My skills</a>
+        <a class="footer__link" href="#">Despre mine</a>
+        <a class="footer__link" href="#connect">Hai să ne conectăm</a>
       </nav>
-      <div class="footer__copy">&copy; 2025 - Virgil Ciociu</div>
+      <div class="footer__copy">&copy; 2025 — Virgil Ciociu</div>
     </footer>
+
+    <!-- ========== SCRIPT EMAIL COPY ========== -->
+    <script>
+      function copyEmail() {
+        const email = 'ciociu.adr@gmail.com';
+        const btn = document.getElementById('emailBtn');
+        const btnText = document.getElementById('emailBtnText');
+        const toast = document.getElementById('toast');
+
+        navigator.clipboard.writeText(email).then(() => {
+          // Schimbă starea butonului
+          btn.classList.add('copied');
+          btnText.textContent = '✓ Copiat!';
+
+          // Afișează toast
+          toast.classList.add('show');
+
+          // Resetează după 2.5s
+          setTimeout(() => {
+            btn.classList.remove('copied');
+            btnText.textContent = email;
+            toast.classList.remove('show');
+          }, 2500);
+        }).catch(() => {
+          // Fallback pentru browsere vechi
+          const el = document.createElement('textarea');
+          el.value = email;
+          document.body.appendChild(el);
+          el.select();
+          document.execCommand('copy');
+          document.body.removeChild(el);
+
+          btn.classList.add('copied');
+          btnText.textContent = '✓ Copiat!';
+          toast.classList.add('show');
+
+          setTimeout(() => {
+            btn.classList.remove('copied');
+            btnText.textContent = email;
+            toast.classList.remove('show');
+          }, 2500);
+        });
+      }
+
+      // Grid inner responsive
+      function handleLayout() {
+        const inner = document.getElementById('connect-inner');
+        if (!inner) return;
+        if (window.innerWidth <= 768) {
+          inner.style.gridTemplateColumns = '1fr';
+        } else {
+          inner.style.gridTemplateColumns = '1fr 1fr';
+        }
+      }
+      handleLayout();
+      window.addEventListener('resize', handleLayout);
+    </script>
   </body>
 </html>
