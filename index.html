@@ -1,218 +1,153 @@
 <!DOCTYPE html>
-<html lang="ro">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Programator Front-End — Virgil C.</title>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Virgil C. — Freelance Front-End Developer</title>
+<meta name="description" content="Virgil C. — Freelance Front-End Developer based in Northampton, United Kingdom. HTML, CSS &amp; JavaScript, mobile-first websites that just work.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-    <!-- IBM Plex Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+<!-- Loading screen -->
+<div class="loader" id="loader" aria-hidden="true">
+  <span class="loader__text">Virgil C.</span>
+</div>
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="css/style.css" />
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-  </head>
+<!-- Scroll progress bar -->
+<div class="progress" id="progress"></div>
 
-  <body>
+<!-- Ambient sparkle field -->
+<div class="sparkle-field" aria-hidden="true"></div>
 
-    <!-- Toast notificare copiere email -->
-    <div class="toast" id="toast">✓ Email copiat în clipboard!</div>
+<main>
 
-    <!-- ========== SECȚIUNEA BINE AI VENIT ========== -->
-    <div class="grid">
-      <div data-full>
-        <h1><span>Virgil</span> <span>C.</span></h1>
-      </div>
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <div class="hero__inner">
+      <p class="hero__eyebrow">Virgil C.</p>
+      <h1 class="hero__title glitter-text">Freelance<br>Front&#8209;End<br>Developer</h1>
+      <p class="hero__location">Based in Northampton, United Kingdom</p>
+      <a href="#projects" class="btn btn--primary" data-ripple>View my work</a>
+    </div>
+    <a href="#about" class="hero__scroll" aria-label="Scroll to About section">
+      <span></span>
+    </a>
+  </section>
 
-      <div data-full>
-        <h2><span>Programator</span>&nbsp;<span>Front-End</span></h2>
-      </div>
-
-      <div data-full>
-        <div class="break-52"></div>
-      </div>
-
-      <div data-full>
-        <h3><span>Despre</span> <span>mine</span></h3>
-      </div>
-
-      <div data-full>
-        <div class="break-16"></div>
-      </div>
-
-      <div data-full>
-        <div class="shadow-box">
-          <p class="description">
-            Cu peste <strong style="color:#82cfff;">100 de pagini web</strong> realizate și un punctaj de 
-            <strong style="color:#82cfff;">4,8 din 5 pe Trustpilot</strong>, Virgil C. îți va crea 
-            exact site-ul pe care ți-l dorești — ba și mai mult. Accesează conturile mele de social media 
-            pentru a lua legătura.
-          </p>
-          <div class="trustpilot-badge">
-            <span class="stars">★★★★★</span>
-            <span class="rating-text">4,8 / 5 · Trustpilot</span>
-          </div>
-        </div>
-      </div>
-
-      <div data-full>
-        <div class="break-52"></div>
-      </div>
-
-      <div data-full>
-        <button data-style="disc"></button>
-      </div>
-
-      <div data-full>
-        <div class="break-52"></div>
+  <!-- ABOUT -->
+  <section class="about reveal" id="about">
+    <div class="about__photo-wrap">
+      <div class="about__photo-frame">
+        <img src="image/virgilciociu.jpg" alt="Portrait of Virgil C." class="about__photo">
       </div>
     </div>
 
-    <!-- ========== SECȚIUNEA CONECTEAZĂ-TE ========== -->
-    <div class="grid" id="connect">
-      <div data-full>
-        <div class="break-52"></div>
+    <div class="about__content">
+      <h2 class="section-title">About</h2>
+      <p class="about__text">
+        Front-End Developer with solid, hands-on experience across modern web technologies
+        and over 130 active websites built and shipped. Virgil C. is a Freelance Front-End
+        Developer based in Northampton, United Kingdom that you can rely on.
+      </p>
+
+      <div class="trustpilot" role="img" aria-label="Trustpilot rating 4.9 out of 5 stars">
+        <span class="trustpilot__stars">
+          <svg viewBox="0 0 24 24" class="star"><path d="M12 2l2.9 6.3 6.9.6-5.2 4.6 1.6 6.8L12 16.9 5.8 20.3l1.6-6.8L2.2 8.9l6.9-.6z"/></svg>
+          <svg viewBox="0 0 24 24" class="star"><path d="M12 2l2.9 6.3 6.9.6-5.2 4.6 1.6 6.8L12 16.9 5.8 20.3l1.6-6.8L2.2 8.9l6.9-.6z"/></svg>
+          <svg viewBox="0 0 24 24" class="star"><path d="M12 2l2.9 6.3 6.9.6-5.2 4.6 1.6 6.8L12 16.9 5.8 20.3l1.6-6.8L2.2 8.9l6.9-.6z"/></svg>
+          <svg viewBox="0 0 24 24" class="star"><path d="M12 2l2.9 6.3 6.9.6-5.2 4.6 1.6 6.8L12 16.9 5.8 20.3l1.6-6.8L2.2 8.9l6.9-.6z"/></svg>
+          <svg viewBox="0 0 24 24" class="star star--half"><path d="M12 2l2.9 6.3 6.9.6-5.2 4.6 1.6 6.8L12 16.9 5.8 20.3l1.6-6.8L2.2 8.9l6.9-.6z"/></svg>
+        </span>
+        <span class="trustpilot__score">4.9 / 5 on Trustpilot</span>
+        <span class="trustpilot__note">Every review, without exception, has been exceptional.</span>
       </div>
 
-      <div data-full>
-        <h3><span>Hai să</span> <span>ne conectăm</span></h3>
-      </div>
+      <a href="#contact" class="btn btn--cta glitter-text" data-ripple>Let's build something together!</a>
+    </div>
+  </section>
 
-      <div data-full>
-        <div class="break-16"></div>
-      </div>
+  <!-- PROJECTS -->
+  <section class="projects" id="projects">
+    <h2 class="section-title section-title--center reveal">Projects</h2>
 
-      <div data-full>
-        <div class="grid-inner" id="connect-inner">
+    <div class="project-grid">
 
-          <!-- Stânga: Fotografie -->
-          <div
-            class="connect-photo"
-            style="background-image: url(image/avatar-marian-zburlea.jpg)"
-          ></div>
-
-          <!-- Dreapta: Text + iconuri + email -->
-          <div class="connect-right">
-            <div class="shadow-box connect-box">
-              <p class="description">
-                 
-                Experiența mea acoperă site-uri de prezentare, portofolii, 
-                landing pages și aplicații web — toate optimizate pentru 
-                mobil și tabletă.
-                Scrie-mi și hai să construim împreună ceva remarcabil.
-              </p>
-            </div>
-
-            <div class="connect-icons">
-              <!-- Facebook -->
-              <a href="https://www.facebook.com/AdrianCiociu1" target="_blank" class="social-icon-wrapper">
-                <div class="social__icon" style="background-image: url(image/facebook.png)"></div>
-                <span class="social-icon-label">Facebook</span>
-              </a>
-
-              <!-- LinkedIn → wip.jpg -->
-              <a href="image/wip.jpg" target="_blank" class="social-icon-wrapper">
-                <div class="social__icon" style="background-image: url(image/linkedin.png)"></div>
-                <span class="social-icon-label">LinkedIn</span>
-              </a>
-            </div>
-
-            <!-- Buton email cu copy-to-clipboard -->
-            <button class="email-btn" id="emailBtn" onclick="copyEmail()">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="2" y="4" width="20" height="16" rx="2"/>
-                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
-              </svg>
-              <span id="emailBtnText">ciociu.adr@gmail.com</span>
-            </button>
-
-          </div>
+      <a class="project-card reveal" data-tilt href="https://virgilciociu.github.io/click-cyber-net/index.html" target="_blank" rel="noopener">
+        <div class="project-card__media">
+          <img src="image/shop.png" alt="Screenshot of an online shop website" loading="lazy">
         </div>
-      </div>
+        <div class="project-card__body">
+          <h3>Online Shop</h3>
+          <p>A virtual store front, built for browsing and buying.</p>
+          <span class="project-card__link">Visit site &#8594;</span>
+        </div>
+      </a>
 
-      <div data-full>
-        <div class="break-52"></div>
-      </div>
+      <a class="project-card reveal" data-tilt href="https://virgilciociu.github.io/taraf/" target="_blank" rel="noopener">
+        <div class="project-card__media">
+          <img src="image/music.png" alt="Screenshot of a music band website" loading="lazy">
+        </div>
+        <div class="project-card__body">
+          <h3>Band Website</h3>
+          <p>A promotional site for a live music band.</p>
+          <span class="project-card__link">Visit site &#8594;</span>
+        </div>
+      </a>
 
-      <div data-full>
-        <button data-style="disc"></button>
-      </div>
+      <a class="project-card reveal" data-tilt href="https://virgilciociu.github.io/cybercaffe/" target="_blank" rel="noopener">
+        <div class="project-card__media">
+          <img src="image/internetcaffe.png" alt="Screenshot of an internet cafe website" loading="lazy">
+        </div>
+        <div class="project-card__body">
+          <h3>Internet Caf&eacute;</h3>
+          <p>A local business site for an internet caf&eacute;.</p>
+          <span class="project-card__link">Visit site &#8594;</span>
+        </div>
+      </a>
 
-      <div data-full>
-        <div class="break-52"></div>
-      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact reveal" id="contact">
+    <h2 class="section-title section-title--center">Contact</h2>
+    <p class="contact__intro">Have a project in mind? Get in touch.</p>
+
+    <div class="contact__list">
+      <a class="contact__item" href="mailto:ciociu.adr@gmail.com" data-ripple>
+        <span class="contact__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M3 5h18a1 1 0 011 1v12a1 1 0 01-1 1H3a1 1 0 01-1-1V6a1 1 0 011-1zm1.5 2.4V17h15V7.4l-7.5 5.4-7.5-5.4zm.7-.4L12 11.5 18.8 7H5.2z"/></svg>
+        </span>
+        <span>ciociu.adr@gmail.com</span>
+      </a>
+
+      <a class="contact__item" href="tel:+447706648004" data-ripple>
+        <span class="contact__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.2c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8z"/></svg>
+        </span>
+        <span>+44 7706 648004</span>
+      </a>
+
+      <a class="contact__item" href="https://www.linkedin.com/in/adrian-ciociu-0528293ab/" target="_blank" rel="noopener" data-ripple>
+        <span class="contact__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M4.98 3.5a2.5 2.5 0 11.02 5 2.5 2.5 0 01-.02-5zM3 9h4v12H3V9zm7 0h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.55 4.78 5.86V21h-4v-5.5c0-1.3-.02-3-1.85-3-1.85 0-2.13 1.4-2.13 2.9V21h-4V9z"/></svg>
+        </span>
+        <span>LinkedIn profile</span>
+      </a>
+      <p class="contact__note">You must be logged in to LinkedIn to view this profile.</p>
     </div>
 
-    <!-- ========== FOOTER ========== -->
-    <footer>
-      <nav class="footer__link--wrapper">
-        <a class="footer__link" href="#">Despre mine</a>
-        <a class="footer__link" href="#connect">Hai să ne conectăm</a>
-      </nav>
-      <div class="footer__copy">&copy; 2025 — Virgil Ciociu</div>
+    <footer class="footer">
+      <p>&copy; 2026 Virgil Ciociu — Freelance Front-End Developer</p>
     </footer>
+  </section>
 
-    <!-- ========== SCRIPT EMAIL COPY ========== -->
-    <script>
-      function copyEmail() {
-        const email = 'ciociu.adr@gmail.com';
-        const btn = document.getElementById('emailBtn');
-        const btnText = document.getElementById('emailBtnText');
-        const toast = document.getElementById('toast');
+</main>
 
-        navigator.clipboard.writeText(email).then(() => {
-          // Schimbă starea butonului
-          btn.classList.add('copied');
-          btnText.textContent = '✓ Copiat!';
-
-          // Afișează toast
-          toast.classList.add('show');
-
-          // Resetează după 2.5s
-          setTimeout(() => {
-            btn.classList.remove('copied');
-            btnText.textContent = email;
-            toast.classList.remove('show');
-          }, 2500);
-        }).catch(() => {
-          // Fallback pentru browsere vechi
-          const el = document.createElement('textarea');
-          el.value = email;
-          document.body.appendChild(el);
-          el.select();
-          document.execCommand('copy');
-          document.body.removeChild(el);
-
-          btn.classList.add('copied');
-          btnText.textContent = '✓ Copiat!';
-          toast.classList.add('show');
-
-          setTimeout(() => {
-            btn.classList.remove('copied');
-            btnText.textContent = email;
-            toast.classList.remove('show');
-          }, 2500);
-        });
-      }
-
-      // Grid inner responsive
-      function handleLayout() {
-        const inner = document.getElementById('connect-inner');
-        if (!inner) return;
-        if (window.innerWidth <= 768) {
-          inner.style.gridTemplateColumns = '1fr';
-        } else {
-          inner.style.gridTemplateColumns = '1fr 1fr';
-        }
-      }
-      handleLayout();
-      window.addEventListener('resize', handleLayout);
-    </script>
-  </body>
+<script src="script.js"></script>
+</body>
 </html>
