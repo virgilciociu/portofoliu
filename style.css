@@ -2,16 +2,16 @@
    Tokens
    ========================================================= */
 :root{
-  --bg-base:   #060a1e;
+  --bg-base:   #206481;
   --bg-mid:    #0a1130;
-  --bg-soft:   #101a42;
+  --bg-soft:   #233168;
   --ink:       #eef1fb;
   --muted:     #99a2c4;
-  --gold:      #ffd23f;
-  --red:       #ff4d5e;
+  --gold:      #9bb827;
+  --red:       #901824;
   --grey-light:#d7dcec;
   --border:    rgba(255,255,255,.09);
-  --card-bg:   rgba(255,255,255,.035);
+  --card-bg:   rgba(77, 23, 23, 0.035);
 
   --font-display: "Space Grotesk", "Segoe UI", sans-serif;
   --font-body:    "Inter", "Segoe UI", sans-serif;
@@ -287,6 +287,13 @@ section{
 /* =========================================================
    Projects
    ========================================================= */
+.projects__intro{
+  color: var(--muted);
+  text-align: center;
+  max-width: 620px;
+  margin: 0 auto 2.25rem;
+}
+
 .project-grid{
   display:grid;
   grid-template-columns: 1fr;
