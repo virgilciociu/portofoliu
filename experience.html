@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>See my experience - Virgil C</title>
+<meta name="description" content="Screenshots of websites and projects built by Virgil C.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body class="page-experience">
+<div class="stripe-bg" aria-hidden="true">
+  <svg viewBox="0 0 1000 400" preserveAspectRatio="xMidYMid meet" focusable="false">
+    <defs>
+      <pattern id="st-exp" width="1000" height="30.7692" patternUnits="userSpaceOnUse">
+        <rect x="0" y="0" width="1000" height="17.2308" fill="var(--accent)"/>
+        <animateTransform attributeName="patternTransform" type="translate" from="0 0" to="0 30.7692" dur="5s" repeatCount="indefinite"/>
+      </pattern>
+    </defs>
+    <text x="500" y="308" text-anchor="middle" textLength="940" lengthAdjust="spacingAndGlyphs"
+          font-family="'Arial Black','Helvetica Neue',Arial,sans-serif" font-weight="900" font-size="300"
+          fill="url(#st-exp)">EXPERIENCE</text>
+  </svg>
+</div>
+<div class="wrap">
+  <nav class="nav" aria-label="Main"><a href="index.html">Home</a><a href="about.html">About Me</a><a href="experience.html" aria-current="page">See my experience</a><a href="connect.html">Connect with Me</a></nav>
+  <main>
+    <h2 class="accent-text">See my experience</h2>
+    <div class="stage">
+      <div class="frame" id="frame" aria-live="off">
+        <figure class="slide is-active">
+          <img src="image/ogmp3.png" alt="Screenshot: OGMP3" >
+          <figcaption>1 / 7 &middot; OGMP3</figcaption>
+        </figure>
+        <figure class="slide">
+          <img src="image/repair.png" alt="Screenshot: Repair" loading="lazy">
+          <figcaption>2 / 7 &middot; Repair</figcaption>
+        </figure>
+        <figure class="slide">
+          <img src="image/taraf.png" alt="Screenshot: Taraf" loading="lazy">
+          <figcaption>3 / 7 &middot; Taraf</figcaption>
+        </figure>
+        <figure class="slide">
+          <img src="image/psih.png" alt="Screenshot: Psih" loading="lazy">
+          <figcaption>4 / 7 &middot; Psih</figcaption>
+        </figure>
+        <figure class="slide">
+          <img src="image/coin.png" alt="Screenshot: Coin" loading="lazy">
+          <figcaption>5 / 7 &middot; Coin</figcaption>
+        </figure>
+        <figure class="slide">
+          <img src="image/click.png" alt="Screenshot: Click" loading="lazy">
+          <figcaption>6 / 7 &middot; Click</figcaption>
+        </figure>
+        <figure class="slide">
+          <img src="image/cmc.png" alt="Screenshot: CMC" loading="lazy">
+          <figcaption>7 / 7 &middot; CMC</figcaption>
+        </figure>
+      </div>
+      <div class="hud">
+        <div class="leds" id="leds" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="dots" id="dots" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <button class="sound-btn" id="soundBtn" type="button" aria-pressed="false">&#9654; Play music</button>
+      </div>
+    </div>
+    <p class="hint" id="hint">Slides change automatically with the beat (30-second loop).</p>
+    <section class="stats" aria-label="Numbers at a glance">
+      <div class="stat"><strong>148+</strong><span>active websites</span></div>
+      <div class="stat"><strong>8</strong><span>apps on Google Play &amp; iOS</span></div>
+      <div class="stat"><strong>2</strong><span>virtual coins, Bitcoin-style</span></div>
+      <div class="stat"><strong>4.9 / 5</strong><span>on Google</span></div>
+      <div class="stat"><strong>4.9 / 5</strong><span>on Trustpilot</span></div>
+      <p class="stats__note">Great reviews from happy clients, on every platform.</p>
+    </section>
+  </main>
+  <p class="footer">&copy; 2026 Virgil C. &mdash; Front-End Developer, Northampton, UK</p>
+</div>
+<script src="js/common.js"></script>
+<script src="js/experience.js"></script>
+</body>
+</html>
