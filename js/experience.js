@@ -1,8 +1,9 @@
 /* =========================================================
    See my experience - 30 second acid-bass loop + synced slideshow
-   Tempo: 112 BPM  ->  1 bar = 2.142857 s  ->  14 bars = exactly 30 s
-   7 screenshots x 2 bars each = 14 bars, so the slideshow and the
-   music loop restart together, and every slide change lands on a bar line.
+   Tempo: 112 BPM  ->  1 beat = 0.5357 s  ->  14 bars (56 beats) = exactly 30 s
+   All screenshots share those 56 beats (3 or 4 beats each), so the slideshow and
+   the music loop restart together and every slide change lands on a beat.
+   Slides change with a 0.5 s crossfade. Leaving the page stops the music at once.
    ========================================================= */
 (function () {
   'use strict';
@@ -14,7 +15,7 @@
   const BARS = 14;
   const TOTAL_STEPS = STEPS_PER_BAR * BARS;   // 224 steps = 30.000 s
   const LOOP = STEP * TOTAL_STEPS;
-  const BARS_PER_SLIDE = 2;
+  const TOTAL_BEATS = BARS * 4;
 
   /* ---------- The bass line (one bar, 16 steps, Hz) ---------- */
   const acidBass = [
@@ -44,6 +45,7 @@
   const leds = Array.prototype.slice.call(document.querySelectorAll('#leds span'));
   const btn = document.getElementById('soundBtn');
   const hint = document.getElementById('hint');
+  const FADE_MS = 500;                  // crossfade length
   const HINT_DEFAULT = hint.textContent;
 
   /* ---------- State ---------- */
@@ -254,6 +256,18 @@
     }
   }
 
+  // Hard stop for navigation: no sound may continue on, or after, another page.
+  function haltAudio() {
+    if (timer) { clearInterval(timer); timer = null; }
+    musicOn = false;
+    if (out) { try { out.disconnect(); } catch (e) { /* ignore */ } out = null; }
+    if (ctx) {
+      const c = ctx;
+      ctx = null;
+      try { const p = c.close(); if (p && p.catch) p.catch(function () { /* ignore */ }); } catch (e) { /* ignore */ }
+    }
+  }
+
   function stopMusic() {
     const p = currentPos();
     musicOn = false;
@@ -278,10 +292,23 @@
   // First tap / key anywhere starts the music (browsers block sound before a gesture).
   function onGesture(e) {
     if (btn.contains(e.target)) return;
+    if (e.target.closest && e.target.closest('a[href]')) return;   // a tap on a menu link must not start music
     if (!userMuted && !musicOn) tryStart();
   }
   ['pointerdown', 'touchend', 'keydown'].forEach(function (ev) {
     document.addEventListener(ev, onGesture, { passive: true });
+  });
+
+  // Any link click (capture phase), leaving the tab/page, or the browser caching the page: silence first.
+  document.addEventListener('click', function (e) {
+    const a = e.target.closest && e.target.closest('a[href]');
+    if (a && !a.target && !e.defaultPrevented) haltAudio();
+  }, true);
+  window.addEventListener('pagehide', haltAudio);
+  window.addEventListener('pageshow', function (e) {
+    if (!e.persisted) return;            // coming back from the back/forward cache: start fresh
+    updateButton();
+    if (!userMuted) tryStart();
   });
 
   document.addEventListener('visibilitychange', function () {
@@ -300,13 +327,31 @@
     return performance.now() / 1000 - vt0;
   }
 
-  let curSlide = 0;
+  let curSlide = -1;
   let curStep = -1;
-  const stepsPerSlide = STEPS_PER_BAR * BARS_PER_SLIDE;
+  let fadeTimer = null;
+  // Slide k starts on beat round(k * 56 / N): with 16 slides that alternates 4 and 3 beats.
+  const slideStart = slides.map(function (_, k) { return Math.round(k * TOTAL_BEATS / slides.length) * 4; });
+
+  function slideAt(step) {
+    let k = slides.length - 1;
+    while (k > 0 && step < slideStart[k]) k--;
+    return k;
+  }
 
   function setSlide(i) {
+    const prev = curSlide;
     curSlide = i;
-    slides.forEach(function (el, k) { el.classList.toggle('is-active', k === i); });
+    clearTimeout(fadeTimer);
+    slides.forEach(function (el, k) {
+      el.classList.remove('is-prev');
+      el.classList.toggle('is-active', k === i);
+    });
+    // the old picture stays fully visible underneath while the new one fades in over 0.5 s
+    if (prev >= 0 && prev !== i) {
+      slides[prev].classList.add('is-prev');
+      fadeTimer = setTimeout(function () { slides[prev].classList.remove('is-prev'); }, FADE_MS + 30);
+    }
     dots.forEach(function (el, k) { el.classList.toggle('on', k === i); });
   }
 
@@ -319,7 +364,7 @@
   function render() {
     const inLoop = currentPos() % LOOP;
     const step = Math.floor(inLoop / STEP);
-    const slide = Math.floor(step / stepsPerSlide) % slides.length;
+    const slide = slideAt(step);
     if (slide !== curSlide) setSlide(slide);
     if (step !== curStep) {
       const s = step % STEPS_PER_BAR;
@@ -333,6 +378,9 @@
 
   setSlide(0);
   updateButton();
+  window.addEventListener('load', function () {
+    slides.forEach(function (el) { const im = el.querySelector('img'); if (im) { im.loading = 'eager'; } });
+  });
   requestAnimationFrame(render);
 
   /* ---------- Try to autoplay; fall back to "tap to start" ---------- */

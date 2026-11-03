@@ -186,10 +186,11 @@ h2{ font-size:clamp(1.8rem, 6vw, 3rem); }
 }
 .slide{
   position:absolute; inset:0; margin:0;
-  opacity:0; transform:scale(1.05);
-  transition:opacity .55s ease, transform 1.2s ease;
+  opacity:0;
+  transition:opacity .5s linear;            /* 0.5 s crossfade, like a video cut */
 }
-.slide.is-active{ opacity:1; transform:none; z-index:2; }
+.slide.is-prev{ opacity:1; z-index:1; transition:none; }   /* old picture stays until the new one is fully in */
+.slide.is-active{ opacity:1; z-index:2; }
 .slide img{ width:100%; height:100%; object-fit:contain; }
 .slide figcaption{
   position:absolute; left:0; right:0; bottom:0; padding:22px 14px 10px;
@@ -250,6 +251,6 @@ h2{ font-size:clamp(1.8rem, 6vw, 3rem); }
 
 @media (prefers-reduced-motion: reduce){
   body{ animation:none; }
-  .slide{ transform:none !important; transition:opacity .2s !important; }
+  .slide{ transition:opacity .2s !important; }
   .frame.beat{ animation:none; }
 }
