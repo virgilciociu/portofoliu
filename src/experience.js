@@ -3,9 +3,11 @@
    - A spiral-galaxy vortex spins in the centre of the screen.
    - The 16 websites float around it as irregular 3D panels, each on its own orbit.
      Their motion is real Newtonian physics (src/physics.js), much slower than the vortex.
-   - Hover a panel: it stops and grows. Move away: it moves on again. Click: open the site.
-   - Drag with the mouse to turn the whole scene.
-   - Phones, "reduce motion", no WebGL or the "List view" button: a light 2D card grid.
+   - PHONE: the scene is fully animated. Tap a panel to pause it, tap it again to open the site.
+     Swipe sideways to turn the scene.
+   - COMPUTER (and "reduce motion"): the same scene, frozen. Click a panel to open the site,
+     drag with the mouse to turn the scene.
+   - No WebGL or the "List view" button: a light 2D card grid.
    The 2D cards in experience.html are the single source of truth for names, links and images.
    ========================================================= */
 import * as THREE from 'three';
@@ -67,10 +69,13 @@ import { createSim } from './physics.js';
     } catch (e) { return false; }
   }
 
-  const can3D = !reduceMotion && !smallScreen && webglAvailable();
+  const isPhone = smallScreen;
+  const FROZEN = !(isPhone && !reduceMotion);     // animated on phones only
+  const FROZEN_TIME = 14.0;
+  const can3D = webglAvailable();
   root.classList.add('flat', 'reveal');
   startCardReveal();
-  if (!can3D) return;                // simplified version: vortex in CSS + cards
+  if (!can3D) return;                // no WebGL: simple cards
 
   /* =========================================================
      3D scene
@@ -78,7 +83,7 @@ import { createSim } from './physics.js';
   const PANEL_W = 4.4;
   const PANEL_H = PANEL_W * 614 / 1280;
   const VORTEX_R = 8.5;              // radius of the visible vortex disc
-  const CAM_DIST = 27;
+  let camDist = 27;
 
   let renderer, scene, camera, bgMesh, dust, vortex, swirl, glow, sim;
   const bolts = [];                  // lightning bolts (pooled)
@@ -97,6 +102,7 @@ import { createSim } from './physics.js';
   const ray = new THREE.Raycaster();
   let mouseSeen = false;
   let hoverIdx = -1;
+  let touchSel = -1, usingTouch = false, forceRender = 3, lastSig = '';
   let selectedIdx = -1;
   let dragging = false, dragMoved = 0, downX = 0, downY = 0, lastX = 0, lastY = 0;
 
@@ -106,6 +112,7 @@ import { createSim } from './physics.js';
   // textures, so js/textures-local.js (small inlined copies) is loaded first.
   const isFile = window.location.protocol === 'file:';
   function texSrc(site) {
+    if (isPhone && !isFile) return site.src.replace('-1280.webp', '-640.webp');
     if (isFile && window.__TEX) {
       const key = site.src.replace(/^.*\//, '').replace('-1280.webp', '');
       if (window.__TEX[key]) return window.__TEX[key];
@@ -131,7 +138,7 @@ import { createSim } from './physics.js';
 
   const panelFrag = [
     'precision highp float;',
-    'uniform sampler2D uTex; uniform float uVel; uniform float uTime; uniform float uHover; uniform float uActive; uniform vec3 uAccent;',
+    'uniform sampler2D uTex; uniform float uVel; uniform float uTime; uniform float uHover; uniform float uActive; uniform float uCam; uniform vec3 uAccent;',
     'varying vec2 vUv; varying float vDepth;',
     'float hash(float n){ return fract(sin(n) * 43758.5453123); }',
     'void main(){',
@@ -149,12 +156,12 @@ import { createSim } from './physics.js';
     '  vec3 col = vec3(r, gr, b);',
     '  col *= 0.95 + 0.05 * sin(vUv.y * 700.0 + uTime * 4.0);',
     '  col += uAccent * on * 0.12;',
-    '  col *= mix(0.55, 1.0, smoothstep(46.0, 16.0, vDepth)) * (0.80 + 0.20 * uActive + 0.25 * uHover);',
+    '  col *= mix(0.55, 1.0, smoothstep(uCam + 19.0, uCam - 11.0, vDepth)) * (0.80 + 0.20 * uActive + 0.25 * uHover);',
     '  vec2 e = min(vUv, 1.0 - vUv);',
     '  float edge = smoothstep(0.0, 0.012, min(e.x * 0.55, e.y * 1.15));',
     '  vec3 frame = uAccent * (1.2 + uHover * 1.4);',
     '  col = mix(frame, col, edge);',
-    '  float fade = smoothstep(80.0, 50.0, vDepth) * smoothstep(0.6, 3.2, vDepth);',
+    '  float fade = smoothstep(uCam + 53.0, uCam + 23.0, vDepth) * smoothstep(0.6, 3.2, vDepth);',
     '  gl_FragColor = vec4(col, fade);',
     '}'
   ].join('\n');
@@ -162,7 +169,7 @@ import { createSim } from './physics.js';
   /* ---------- build ---------- */
   function build(onProgress) {
     renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: false, alpha: false, powerPreference: 'high-performance' });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isPhone ? 1.5 : 1.75));
     renderer.setClearColor(0x0b0616, 1);
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(48, 1, 0.1, 200);
@@ -181,7 +188,7 @@ import { createSim } from './physics.js';
     scene.add(bgMesh);
 
     // Distant dust
-    const DUST = 1500;
+    const DUST = isPhone ? 800 : 1500;
     const pos = new Float32Array(DUST * 3);
     const col = new Float32Array(DUST * 3);
     const seed = new Float32Array(DUST);
@@ -210,7 +217,7 @@ import { createSim } from './physics.js';
     // The vortex: disc + inflowing particles + core glow
     vortex = new THREE.Group();
     scene.add(vortex);
-    const SW = 16000;
+    const SW = isPhone ? 8000 : 16000;
     const sr = new Float32Array(SW * 4);
     const sp = new Float32Array(SW * 3);              // positions are computed in the shader
     for (let i = 0; i < SW; i++) {
@@ -261,7 +268,7 @@ import { createSim } from './physics.js';
           vertexShader: panelVert, fragmentShader: panelFrag, transparent: true, depthWrite: false, side: THREE.DoubleSide,
           uniforms: {
             uTex: { value: null }, uVel: { value: 0 }, uTime: { value: 0 }, uHover: { value: 0 },
-            uActive: { value: 0 }, uAccent: { value: accentColor.clone() }
+            uActive: { value: 0 }, uCam: { value: camDist }, uAccent: { value: accentColor.clone() }
           }
         });
         const mesh = new THREE.Mesh(geo, mat);
@@ -292,7 +299,7 @@ import { createSim } from './physics.js';
   function updateCamera(dt, time) {
     mouseSmooth.lerp(mouseSeen ? mouse : new THREE.Vector2(0, 0), 1 - Math.exp(-dt * 3));
     const cp = Math.cos(pitch);
-    camPos.set(Math.sin(yaw) * cp * CAM_DIST, Math.sin(pitch) * CAM_DIST, Math.cos(yaw) * cp * CAM_DIST);
+    camPos.set(Math.sin(yaw) * cp * camDist, Math.sin(pitch) * camDist, Math.cos(yaw) * cp * camDist);
     camera.position.copy(camPos);
     camera.position.x += mouseSmooth.x * 0.9;
     camera.position.y += mouseSmooth.y * 0.6;
@@ -305,7 +312,10 @@ import { createSim } from './physics.js';
     const w = window.innerWidth, h = window.innerHeight;
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
+    camDist = camera.aspect < 1 ? Math.min(46, 27 / Math.max(0.58, camera.aspect * 1.2)) : 27;
     camera.updateProjectionMatrix();
+    forceRender = 3;
+    panels.forEach(function (p) { p.mat.uniforms.uCam.value = camDist; });
     bgMesh.material.uniforms.uRes.value.set(w, h);
     const sc = h * 0.30 * renderer.getPixelRatio();
     dust.material.uniforms.uScale.value = sc;
@@ -395,13 +405,25 @@ import { createSim } from './physics.js';
     });
     glow.scale.setScalar(1 + flash * 0.35);
   }
+  function staticBolts() {
+    for (let k = 0; k < 2; k++) {
+      fireBolt(bolts[k]);
+      bolts[k].life = bolts[k].dur = 1e9;
+      bolts[k].line.material.opacity = 0.8;
+    }
+  }
 
   /* ---------- loop ---------- */
+  function hitAt(nx, ny) {
+    ray.setFromCamera(new THREE.Vector2(nx, ny), camera);
+    const hits = ray.intersectObjects(panels.map(function (p) { return p.mesh; }), false);
+    return hits.length ? hits[0].object.userData.index : -1;
+  }
   function frame() {
     if (!running) return;
     requestAnimationFrame(frame);
     const dt = Math.min(0.05, clock.getDelta());
-    const time = clock.elapsedTime;
+    const time = FROZEN ? FROZEN_TIME : clock.elapsedTime;
 
     // camera orbit with inertia
     if (!dragging) {
@@ -410,33 +432,32 @@ import { createSim } from './physics.js';
     }
     updateCamera(dt, time);
 
-    // hover: raycast against the moving panels
+    // hover (mouse) or selection (touch)
     let newHover = -1;
-    if (mouseSeen && !dragging) {
-      ray.setFromCamera(mouse, camera);
-      const hits = ray.intersectObjects(panels.map(function (p) { return p.mesh; }), false);
-      if (hits.length) newHover = hits[0].object.userData.index;
-    }
+    if (usingTouch) newHover = touchSel;
+    else if (mouseSeen && !dragging) newHover = hitAt(mouse.x, mouse.y);
     if (newHover !== hoverIdx) {
       hoverIdx = newHover;
-      sim.setFrozen(hoverIdx);                 // the hovered panel stops; it moves on again when the mouse leaves
+      if (!FROZEN) sim.setFrozen(hoverIdx);       // the chosen panel stops; it moves on again when released
       if (hoverIdx >= 0) select(hoverIdx);
       canvas.style.cursor = dragging ? 'grabbing' : (hoverIdx >= 0 ? 'pointer' : 'grab');
     }
 
-    // physics
-    sim.step(dt);
-    sim.orient(dt, camera.position);
+    // physics (animated mode only); panels always turn to face the viewer
+    if (FROZEN) sim.snapOrientation(camera.position);
+    else { sim.step(dt); sim.orient(dt, camera.position); }
 
+    let hoverSum = 0;
     for (let i = 0; i < N; i++) {
       const p = panels[i], b = sim.bodies[i];
       p.hover += ((i === hoverIdx ? 1 : 0) - p.hover) * (1 - Math.exp(-dt * 8));
+      hoverSum += p.hover;
       p.mesh.position.copy(b.p);
       p.mesh.quaternion.copy(b.q);
       p.mesh.scale.setScalar(p.scale * (1 + 0.55 * p.hover));
       const u = p.mat.uniforms;
       u.uTime.value = time;
-      u.uVel.value = Math.min(1, b.w.length() * 4);          // wobble after a collision makes it flicker
+      u.uVel.value = FROZEN ? 0 : Math.min(1, b.w.length() * 4);
       u.uHover.value = p.hover;
       u.uActive.value = p.hover;
     }
@@ -447,39 +468,52 @@ import { createSim } from './physics.js';
     swirl.material.uniforms.uTime.value = time;
     glow.material.uniforms.uTime.value = time;
     glow.quaternion.copy(camera.quaternion);
-    updateBolts(dt, time);
+    if (!FROZEN) updateBolts(dt, time);
     bgMesh.material.uniforms.uTime.value = time;
     dust.material.uniforms.uTime.value = time;
     dust.rotation.y = time * 0.004;
 
-    renderer.render(scene, camera);
+    // frozen scene: draw only when something changed (saves battery)
+    let draw = true;
+    if (FROZEN) {
+      const sig = camera.position.x.toFixed(3) + camera.position.y.toFixed(3) + camera.position.z.toFixed(3) + hoverSum.toFixed(3);
+      draw = forceRender > 0 || sig !== lastSig;
+      lastSig = sig;
+      if (forceRender > 0) forceRender--;
+    }
+    if (draw) renderer.render(scene, camera);
 
     if (window.scrollY > window.innerHeight * 1.05) running = false;   // off screen: stop drawing
   }
   function startLoop() {
     if (running) return;
     running = true;
+    forceRender = 3;
     clock.getDelta();
     requestAnimationFrame(frame);
   }
 
   /* ---------- events ---------- */
   function onPointerMove(e) {
-    mouseSeen = true;
-    mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    if (e.pointerType !== 'touch') {
+      usingTouch = false;
+      mouseSeen = true;
+      mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    }
     if (dragging) {
       const dx = e.clientX - lastX, dy = e.clientY - lastY;
       dragMoved += Math.abs(dx) + Math.abs(dy);
       yaw -= dx * 0.006;
-      pitch = Math.min(1.1, Math.max(0.12, pitch + dy * 0.004));
-      yawVel = -dx * 0.006 / Math.max(0.008, 0.016) * 0.5;
+      if (e.pointerType !== 'touch') pitch = Math.min(1.1, Math.max(0.12, pitch + dy * 0.004));
+      yawVel = -dx * 0.003 / 0.008;
       lastX = e.clientX; lastY = e.clientY;
     }
   }
   function overUi(e) { return !!(e.target && e.target.closest && e.target.closest('a, button, nav')); }
   function onDown(e) {
     if (!mode3D || overUi(e) || e.button > 0) return;
+    if (e.pointerType === 'touch') usingTouch = true;
     dragging = true; dragMoved = 0;
     downX = lastX = e.clientX; downY = lastY = e.clientY;
     canvas.style.cursor = 'grabbing';
@@ -490,7 +524,15 @@ import { createSim } from './physics.js';
     dragging = false;
     canvas.style.cursor = hoverIdx >= 0 ? 'pointer' : 'grab';
     if (!wasDragging || overUi(e)) return;
-    if (dragMoved < 6 && hoverIdx >= 0) window.open(sites[hoverIdx].url, '_blank', 'noopener');
+    if (dragMoved >= 8) return;
+    if (e.pointerType === 'touch') {
+      // tap: first tap pauses and selects a panel, second tap on the same panel opens the site
+      const hit = hitAt((e.clientX / window.innerWidth) * 2 - 1, -(e.clientY / window.innerHeight) * 2 + 1);
+      if (hit >= 0 && hit === touchSel) window.open(sites[hit].url, '_blank', 'noopener');
+      else touchSel = hit;
+    } else if (hoverIdx >= 0) {
+      window.open(sites[hoverIdx].url, '_blank', 'noopener');
+    }
   }
 
   /* ---------- mode switch ---------- */
@@ -502,6 +544,7 @@ import { createSim } from './physics.js';
     resize();
     readScroll();
     canvas.style.cursor = 'grab';
+    if (FROZEN) staticBolts();
     startLoop();
   }
   function enterFlat() {
@@ -534,6 +577,7 @@ import { createSim } from './physics.js';
   window.addEventListener('pointermove', onPointerMove, { passive: true });
   window.addEventListener('pointerdown', onDown, { passive: true });
   window.addEventListener('pointerup', onUp, { passive: true });
+  window.addEventListener('pointercancel', function () { dragging = false; }, { passive: true });
   window.addEventListener('pointerleave', function () { mouseSeen = false; mouse.set(10, 10); });
   document.addEventListener('visibilitychange', function () { if (document.hidden) running = false; else if (mode3D) readScroll(); });
   toggleBtn.addEventListener('click', function () { if (mode3D) enterFlat(); else enter3D(); });

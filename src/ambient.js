@@ -1,23 +1,20 @@
 /* =========================================================
-   Cinematic ambient background for Home / About / Connect
-   - Same nebula + particles as the "See my experience" gallery, tinted with the page accent.
-   - The camera drifts forward while you scroll, and follows the mouse a little.
-   - Phones, "reduce motion" and browsers without WebGL keep the CSS aurora instead.
-   - Also plays a short cinematic reveal of the page content (GSAP).
+   Page backgrounds for Home / About / Connect (plain 2D canvas, light on phones too)
+   - Home    : light-navy night sky with twinkling yellow / white / blue stars, a few bigger ones.
+   - About   : old IBM-logo style, "Virgil C" repeated in letters cut by horizontal stripes (blue).
+   - Connect : the same IBM style in dark green.
+   "Reduce motion" draws one still frame. Also plays a short GSAP reveal of the page content.
    ========================================================= */
-import * as THREE from 'three';
-import { bgVert, bgFrag, partVert, partFrag } from './cinematic.js';
-
 (function () {
   'use strict';
 
   const gsap = window.gsap;
-  const root = document.documentElement;
-  const canvas = document.getElementById('ambient');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const smallScreen = window.matchMedia('(max-width: 820px), (pointer: coarse)').matches;
+  const isPhone = window.matchMedia('(max-width: 820px), (pointer: coarse)').matches;
+  const canvas = document.getElementById('ambient');
+  const root = document.documentElement;
 
-  /* ---------- cinematic reveal of the page content ---------- */
+  /* ---------- reveal of the page content ---------- */
   function reveal() {
     if (!gsap || reduceMotion) return;
     const nav = document.querySelector('.nav');
@@ -35,134 +32,152 @@ import { bgVert, bgFrag, partVert, partFrag } from './cinematic.js';
   }
   reveal();
 
-  /* ---------- WebGL ambient background ---------- */
-  function webglAvailable() {
-    try {
-      const c = document.createElement('canvas');
-      return !!(window.WebGLRenderingContext && (c.getContext('webgl2') || c.getContext('webgl')));
-    } catch (e) { return false; }
+  /* ---------- which background? ---------- */
+  const cls = document.body.className;
+  const mode = /page-home/.test(cls) ? 'sky' : /page-about/.test(cls) ? 'about' : /page-connect/.test(cls) ? 'connect' : '';
+  if (!canvas || !mode) return;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  const IBM = {
+    about: { bg: '#0a1f44', fg: '#3a7bd5' },
+    connect: { bg: '#0b2a1f', fg: '#2f8f6a' }
+  };
+
+  let W = 0, H = 0, dpr = 1;
+  let draw = function () {};
+  let animated = !reduceMotion;
+
+  /* ---------- Home: night sky ---------- */
+  const STAR_COLORS = ['#ffe28a', '#ffffff', '#9cc4ff', '#fff3c4', '#c9dcff'];
+  let stars = [];
+  const sprites = {};
+  function sprite(color) {
+    if (sprites[color]) return sprites[color];
+    const c = document.createElement('canvas');
+    c.width = c.height = 64;
+    const g = c.getContext('2d');
+    const gr = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+    gr.addColorStop(0, color);
+    gr.addColorStop(0.12, color);
+    gr.addColorStop(0.35, color + '55');
+    gr.addColorStop(1, color + '00');
+    g.fillStyle = gr;
+    g.fillRect(0, 0, 64, 64);
+    sprites[color] = c;
+    return c;
   }
-  if (!canvas || reduceMotion || smallScreen || !webglAvailable()) return;
-
-  let renderer;
-  try {
-    renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: false, alpha: false, powerPreference: 'high-performance' });
-  } catch (e) { return; }
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.25));
-  renderer.setClearColor(0x0b0616, 1);
-
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 160);
-  camera.position.set(0, 0, 10);
-
-  let tint = new THREE.Color('#a259ff');
-  try {
-    const v = getComputedStyle(document.body).getPropertyValue('--accent').trim();
-    if (v) tint = new THREE.Color(v);
-  } catch (e) { /* keep default */ }
-
-  const bgMat = new THREE.ShaderMaterial({
-    vertexShader: bgVert, fragmentShader: bgFrag, depthTest: false, depthWrite: false,
-    uniforms: {
-      uTime: { value: 0 }, uProg: { value: 0 }, uRes: { value: new THREE.Vector2(1, 1) },
-      uVel: { value: 0 }, uTint: { value: tint }
+  function makeStars() {
+    const area = W * H;
+    const small = Math.round(Math.min(900, Math.max(160, area / (isPhone ? 2600 : 3200))));
+    stars = [];
+    for (let i = 0; i < small; i++) {
+      stars.push({ x: Math.random(), y: Math.random(), r: 0.5 + Math.random() * 0.9, c: STAR_COLORS[(Math.random() * 5) | 0], p: Math.random() * 6.28, s: 0.8 + Math.random() * 2.2, t: 0 });
     }
-  });
-  const bg = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), bgMat);
-  bg.frustumCulled = false;
-  bg.renderOrder = -10;
-  scene.add(bg);
-
-  const COUNT = 1500;
-  const LEN = 220;
-  const pos = new Float32Array(COUNT * 3);
-  const col = new Float32Array(COUNT * 3);
-  const seed = new Float32Array(COUNT);
-  const palette = [new THREE.Color('#d2b0ff'), new THREE.Color('#ff6fc0'), new THREE.Color('#ffa05a'), new THREE.Color('#7fb4ff'), tint];
-  for (let i = 0; i < COUNT; i++) {
-    pos[i * 3] = (Math.random() - 0.5) * 36;
-    pos[i * 3 + 1] = (Math.random() - 0.5) * 20;
-    pos[i * 3 + 2] = 14 - Math.random() * LEN;
-    const c = palette[(Math.random() * palette.length) | 0];
-    col[i * 3] = c.r; col[i * 3 + 1] = c.g; col[i * 3 + 2] = c.b;
-    seed[i] = Math.random();
+    for (let i = 0; i < Math.round(small / 12); i++) {
+      stars.push({ x: Math.random(), y: Math.random(), r: 1.4 + Math.random() * 1.0, c: STAR_COLORS[(Math.random() * 5) | 0], p: Math.random() * 6.28, s: 0.6 + Math.random() * 1.4, t: 1 });
+    }
+    for (let i = 0; i < (isPhone ? 5 : 9); i++) {
+      stars.push({ x: 0.05 + Math.random() * 0.9, y: 0.04 + Math.random() * 0.8, r: 2.6 + Math.random() * 1.8, c: STAR_COLORS[(Math.random() * 3) | 0], p: Math.random() * 6.28, s: 0.5 + Math.random() * 0.9, t: 2 });
+    }
   }
-  const pg = new THREE.BufferGeometry();
-  pg.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-  pg.setAttribute('aColor', new THREE.BufferAttribute(col, 3));
-  pg.setAttribute('aSeed', new THREE.BufferAttribute(seed, 1));
-  const pm = new THREE.ShaderMaterial({
-    vertexShader: partVert, fragmentShader: partFrag, transparent: true, depthWrite: false,
-    blending: THREE.AdditiveBlending,
-    uniforms: { uTime: { value: 0 }, uScale: { value: 300 }, uVel: { value: 0 } }
-  });
-  const particles = new THREE.Points(pg, pm);
-  particles.frustumCulled = false;
-  scene.add(particles);
+  function drawSky(t) {
+    const g = ctx.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, '#16275c');
+    g.addColorStop(0.55, '#26398a');
+    g.addColorStop(1, '#4a4fa0');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, W, H);
+    for (let i = 0; i < stars.length; i++) {
+      const s = stars[i];
+      const tw = animated ? 0.55 + 0.45 * Math.sin(t * s.s + s.p) : 0.85;
+      const x = s.x * W, y = s.y * H;
+      if (s.t === 0) {
+        ctx.globalAlpha = 0.35 + 0.65 * tw;
+        ctx.fillStyle = s.c;
+        ctx.beginPath(); ctx.arc(x, y, s.r, 0, 6.2832); ctx.fill();
+      } else {
+        const size = s.r * (s.t === 2 ? 11 : 7) * (0.85 + 0.15 * tw);
+        ctx.globalAlpha = 0.5 + 0.5 * tw;
+        ctx.drawImage(sprite(s.c), x - size, y - size, size * 2, size * 2);
+        if (s.t === 2) {                               // faint cross spikes on the big ones
+          ctx.globalAlpha = 0.18 + 0.25 * tw;
+          ctx.strokeStyle = s.c;
+          ctx.lineWidth = 1;
+          const L = size * 1.5;
+          ctx.beginPath();
+          ctx.moveTo(x - L, y); ctx.lineTo(x + L, y);
+          ctx.moveTo(x, y - L); ctx.lineTo(x, y + L);
+          ctx.stroke();
+        }
+      }
+    }
+    ctx.globalAlpha = 1;
+  }
 
+  /* ---------- About / Connect: IBM-style "Virgil C" ---------- */
+  let tile = null, tileW = 0, rowH = 0;
+  function makeTile(fg) {
+    const S = Math.max(64, Math.min(170, Math.min(W, H) * (isPhone ? 0.26 : 0.19)));
+    rowH = Math.round(S * 1.02);
+    const probe = document.createElement('canvas').getContext('2d');
+    probe.font = '900 ' + S + 'px Georgia, "Times New Roman", serif';
+    const word = 'Virgil C';
+    tileW = Math.ceil(probe.measureText(word).width + S * 0.55);
+    tile = document.createElement('canvas');
+    tile.width = tileW; tile.height = rowH;
+    const g = tile.getContext('2d');
+    g.font = '900 ' + S + 'px Georgia, "Times New Roman", serif';
+    g.textBaseline = 'alphabetic';
+    g.fillStyle = fg;
+    g.fillText(word, S * 0.1, S * 0.8);
+    const period = S / 12.5;                            // the horizontal cuts, like the IBM logo
+    g.globalCompositeOperation = 'destination-out';
+    for (let y = 0; y < rowH; y += period) g.fillRect(0, y + period * 0.58, tileW, period * 0.42);
+  }
+  function drawIBM(t) {
+    const p = IBM[mode];
+    ctx.fillStyle = p.bg;
+    ctx.fillRect(0, 0, W, H);
+    const rows = Math.ceil(H / rowH) + 1;
+    ctx.globalAlpha = 0.9;
+    for (let r = 0; r < rows; r++) {
+      const dir = r % 2 ? -1 : 1;
+      let off = (animated ? t * 7 * dir : 0) + r * tileW * 0.37;
+      off = ((off % tileW) + tileW) % tileW;
+      const y = r * rowH - rowH * 0.15;
+      for (let x = -off - tileW; x < W; x += tileW) ctx.drawImage(tile, Math.round(x), Math.round(y));
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  /* ---------- sizing + loop ---------- */
   function resize() {
-    const w = window.innerWidth, h = window.innerHeight;
-    renderer.setSize(w, h, false);
-    camera.aspect = w / h;
-    camera.updateProjectionMatrix();
-    bgMat.uniforms.uRes.value.set(w, h);
-    pm.uniforms.uScale.value = h * 0.3 * renderer.getPixelRatio();
-  }
-  resize();
-
-  const mouse = new THREE.Vector2(0, 0);
-  const mouseSmooth = new THREE.Vector2(0, 0);
-  let scrollFrac = 0, scrollSmooth = 0, prevScroll = 0, vel = 0;
-  let running = false;
-  const clock = new THREE.Clock();
-
-  function readScroll() {
-    const max = document.documentElement.scrollHeight - window.innerHeight;
-    scrollFrac = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+    dpr = Math.min(window.devicePixelRatio || 1, isPhone ? 1.5 : 2);
+    W = window.innerWidth; H = window.innerHeight;
+    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+    canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if (mode === 'sky') { makeStars(); draw = drawSky; }
+    else { makeTile(IBM[mode].fg); draw = drawIBM; }
+    draw(performance.now() / 1000);
   }
 
-  function frame() {
+  let running = false, t0 = performance.now();
+  function frame(now) {
     if (!running) return;
     requestAnimationFrame(frame);
-    const dt = Math.min(0.05, clock.getDelta());
-    const t = clock.elapsedTime;
-    scrollSmooth += (scrollFrac - scrollSmooth) * (1 - Math.exp(-dt * 4));
-    const v = (scrollSmooth - prevScroll) / Math.max(dt, 0.001);
-    prevScroll = scrollSmooth;
-    vel += (Math.max(-1.2, Math.min(1.2, v * 2.2)) - vel) * (1 - Math.exp(-dt * 6));
-    mouseSmooth.lerp(mouse, 1 - Math.exp(-dt * 3));
-
-    camera.position.set(mouseSmooth.x * 0.9, mouseSmooth.y * 0.5, 10 - ((t * 0.55 + scrollSmooth * 60) % (LEN - 60)));
-    camera.rotation.set(-mouseSmooth.y * 0.03, -mouseSmooth.x * 0.05, Math.sin(t * 0.2) * 0.01);
-    bgMat.uniforms.uTime.value = t;
-    bgMat.uniforms.uProg.value = scrollSmooth * 0.6 + (t * 0.004) % 1;
-    bgMat.uniforms.uVel.value = vel;
-    pm.uniforms.uTime.value = t;
-    pm.uniforms.uVel.value = vel;
-    renderer.render(scene, camera);
+    draw((now - t0) / 1000);
   }
   function start() {
-    if (running) return;
+    if (running || !animated) return;
     running = true;
-    clock.getDelta();
     requestAnimationFrame(frame);
   }
 
-  window.addEventListener('resize', resize);
-  window.addEventListener('scroll', readScroll, { passive: true });
-  window.addEventListener('pointermove', function (e) {
-    mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-  }, { passive: true });
-  document.addEventListener('visibilitychange', function () { if (document.hidden) running = false; else start(); });
-  canvas.addEventListener('webglcontextlost', function (e) {
-    e.preventDefault();
-    running = false;
-    root.classList.remove('amb');
-  });
-
-  readScroll();
-  scrollSmooth = prevScroll = scrollFrac;
+  resize();
   root.classList.add('amb');
+  window.addEventListener('resize', resize);
+  document.addEventListener('visibilitychange', function () { if (document.hidden) running = false; else start(); });
   start();
 })();

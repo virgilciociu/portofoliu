@@ -293,3 +293,25 @@ html.gl .vortex-css{ display:none; }
 .vortex-css b{ inset:40%; background:radial-gradient(circle, #fff, rgba(255,160,220,.7) 40%, transparent 70%); filter:blur(3px); }
 @keyframes vspin{ to{ transform:rotate(360deg); } }
 @media (prefers-reduced-motion:reduce){ .vortex-css i{ animation:none; } }
+
+/* hint text: mouse vs touch */
+.hint .h-touch{ display:none; }
+@media (hover:none){ .hint .h-mouse{ display:none; } .hint .h-touch{ display:inline; } }
+
+/* phones: the animated 3D scene */
+html.gl body{ touch-action:pan-y; }
+@media (max-width:820px){
+  html.gl .intro{ top:118px; padding:0 14px; }
+  html.gl .intro h2{ font-size:1.35rem; }
+  html.gl .intro .hint{ font-size:.82rem; margin-top:4px; }
+  html.gl .hud__count{ font-size:2.2rem; bottom:calc(env(safe-area-inset-bottom, 0px) + 74px); }
+  html.gl .hud__name{ font-size:1.05rem; max-width:52vw; bottom:calc(env(safe-area-inset-bottom, 0px) + 22px); }
+  html.gl .hud__scroll{ display:none; }
+  html.gl .hud__visit{ bottom:calc(env(safe-area-inset-bottom, 0px) + 18px); padding:10px 16px; }
+}
+
+/* page background colours (the canvas paints over them; they avoid a flash while loading) */
+body.page-home{ background:#1c2d6e; }
+body.page-about{ background:#0a1f44; }
+body.page-connect{ background:#0b2a1f; }
+body.page-home h1.accent-text{ background-image:linear-gradient(90deg,#ffffff,#ffe9a8 55%,#cfe2ff); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; color:transparent; text-shadow:none; filter:drop-shadow(0 2px 14px rgba(8,16,48,.55)); }

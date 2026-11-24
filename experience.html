@@ -4,16 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>See my experience - Virgil C</title>
-<meta name="description" content="An interactive 3D gallery of 16 websites and projects built by Virgil C. Scroll through them and click to visit.">
+<meta name="description" content="An interactive 3D gallery of 7 websites and projects built by Virgil C. Click to visit.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <meta name="theme-color" content="#05080f">
 <meta property="og:type" content="website">
 <meta property="og:title" content="See my experience - Virgil C">
-<meta property="og:description" content="An interactive 3D gallery of 16 websites and projects built by Virgil C. Scroll through them and click to visit.">
+<meta property="og:description" content="An interactive 3D gallery of 7 websites and projects built by Virgil C. Click to visit.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/site.css?v=3">
+<link rel="stylesheet" href="css/site.css?v=4">
 </head>
 <body class="page-experience">
 <div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
@@ -23,13 +23,13 @@
   <main>
     <header class="intro" id="intro">
       <h2 class="accent-text">See my experience</h2>
-      <p class="hint" id="hint">16 websites and projects orbit the vortex. Hover to pause one, click to visit, drag to turn the view.</p>
+      <p class="hint" id="hint"><span class="h-mouse">7 websites and projects. Click a panel to visit it, drag to turn the view.</span><span class="h-touch">7 websites and projects. Tap a panel to pause it, tap again to visit. Swipe to turn the view.</span></p>
     </header>
 
-    <div class="journey" id="journey" style="--n:16">
+    <div class="journey" id="journey" style="--n:7">
       <div class="hud" id="hud" aria-live="polite">
-        <div class="hud__count"><span id="hudNum">01</span><small> / 16</small></div>
-        <div class="hud__name" id="hudName">CMC Performance Cars</div>
+        <div class="hud__count"><span id="hudNum">01</span><small> / 7</small></div>
+        <div class="hud__name" id="hudName">YouTube to MP3</div>
         <a class="btn hud__visit" id="hudLink" href="#" target="_blank" rel="noopener">Visit site &rarr;</a>
         <div class="hud__scroll" id="hudScroll" aria-hidden="true"><span></span>Scroll</div>
       </div>
@@ -38,69 +38,33 @@
     <div class="vortex-css" aria-hidden="true"><i></i><i></i><b></b></div>
 
     <ul class="cards" id="cards" aria-label="Websites and projects">
-      <li><a class="card" href="https://virgilciociu.github.io/CMCgarage/" target="_blank" rel="noopener" data-name="CMC Performance Cars" data-src="image/cmcgarage-1280.webp">
-        <img width="1280" height="614" src="image/cmcgarage-1280.webp" srcset="image/cmcgarage-640.webp 640w, image/cmcgarage-1280.webp 1280w" sizes="(max-width: 700px) 100vw, 460px" alt="Screenshot: CMC Performance Cars" loading="lazy" decoding="async">
-        <span class="card__n">01</span><span class="card__t">CMC Performance Cars</span>
+      <li><a class="card" href="https://virgilciociu.github.io/youtubetomp3/" target="_blank" rel="noopener" data-name="YouTube to MP3" data-src="image/youtubetomp3-1280.webp">
+        <img width="1280" height="614" src="image/youtubetomp3-1280.webp" srcset="image/youtubetomp3-640.webp 640w, image/youtubetomp3-1280.webp 1280w" sizes="(max-width: 700px) 100vw, 460px" alt="Screenshot: YouTube to MP3" loading="lazy" decoding="async">
+        <span class="card__n">01</span><span class="card__t">YouTube to MP3</span>
       </a></li>
       <li><a class="card" href="https://virgilciociu.github.io/cybercaffe/" target="_blank" rel="noopener" data-name="Netscan Café" data-src="image/cybercaffe-1280.webp">
         <img width="1280" height="614" src="image/cybercaffe-1280.webp" srcset="image/cybercaffe-640.webp 640w, image/cybercaffe-1280.webp 1280w" sizes="(max-width: 700px) 100vw, 460px" alt="Screenshot: Netscan Café" loading="lazy" decoding="async">
         <span class="card__n">02</span><span class="card__t">Netscan Café</span>
       </a></li>
-      <li><a class="card" href="https://virgilciociu.github.io/PsycosmicArt/" target="_blank" rel="noopener" data-name="PsycosmicArt" data-src="image/psycosmicart-1280.webp">
-        <img width="1280" height="614" src="image/psycosmicart-1280.webp" srcset="image/psycosmicart-640.webp 640w, image/psycosmicart-1280.webp 1280w" sizes="(max-width: 700px) 100vw, 460px" alt="Screenshot: PsycosmicArt" loading="lazy" decoding="async">
-        <span class="card__n">03</span><span class="card__t">PsycosmicArt</span>
+      <li><a class="card" href="https://virgilciociu.github.io/restaurant/" target="_blank" rel="noopener" data-name="Siegrid Restaurant" data-src="image/restaurant-1280.webp">
+        <img width="1280" height="614" src="image/restaurant-1280.webp" srcset="image/restaurant-640.webp 640w, image/restaurant-1280.webp 1280w" sizes="(max-width: 700px) 100vw, 460px" alt="Screenshot: Siegrid Restaurant" loading="lazy" decoding="async">
+        <span class="card__n">03</span><span class="card__t">Siegrid Restaurant</span>
       </a></li>
-      <li><a class="card" href="https://virgilciociu.github.io/taraf/" target="_blank" rel="noopener" data-name="Taraf" data-src="image/taraf-1280.webp">
-        <img width="1280" height="614" src="image/taraf-1280.webp" srcset="image/taraf-640.webp 640w, image/taraf-1280.webp 1280w" sizes="(max-width: 700px) 100vw, 460px" alt="Screenshot: Taraf" loading="lazy" decoding="async">
-        <span class="card__n">04</span><span class="card__t">Taraf</span>
+      <li><a class="card" href="https://virgilciociu.github.io/DSC-Recovery/css/index.html" target="_blank" rel="noopener" data-name="PsycosmicArt" data-src="image/psycosmic-1280.webp">
+        <img width="1280" height="614" src="image/psycosmic-1280.webp" srcset="image/psycosmic-640.webp 640w, image/psycosmic-1280.webp 1280w" sizes="(max-width: 700px) 100vw, 460px" alt="Screenshot: PsycosmicArt" loading="lazy" decoding="async">
+        <span class="card__n">04</span><span class="card__t">PsycosmicArt</span>
       </a></li>
-      <li><a class="card" href="https://virgilciociu.github.io/danielretzler/" target="_blank" rel="noopener" data-name="Edelstein-Schmuck Marl" data-src="image/danielretzler-1280.webp">
-        <img width="1280" height="614" src="image/danielretzler-1280.webp" srcset="image/danielretzler-640.webp 640w, image/danielretzler-1280.webp 1280w" sizes="(max-width: 700px) 100vw, 460px" alt="Screenshot: Edelstein-Schmuck Marl" loading="lazy" decoding="async">
-        <span class="card__n">05</span><span class="card__t">Edelstein-Schmuck Marl</span>
+      <li><a class="card" href="https://virgilciociu.github.io/danielretzler/" target="_blank" rel="noopener" data-name="Daniel Retzler" data-src="image/danielretzler-1280.webp">
+        <img width="1280" height="614" src="image/danielretzler-1280.webp" srcset="image/danielretzler-640.webp 640w, image/danielretzler-1280.webp 1280w" sizes="(max-width: 700px) 100vw, 460px" alt="Screenshot: Daniel Retzler" loading="lazy" decoding="async">
+        <span class="card__n">05</span><span class="card__t">Daniel Retzler</span>
       </a></li>
-      <li><a class="card" href="https://virgilciociu.github.io/laptop/" target="_blank" rel="noopener" data-name="Laptop refurbishing" data-src="image/laptop-1280.webp">
-        <img width="1280" height="614" src="image/laptop-1280.webp" srcset="image/laptop-640.webp 640w, image/laptop-1280.webp 1280w" sizes="(max-width: 700px) 100vw, 460px" alt="Screenshot: Laptop refurbishing" loading="lazy" decoding="async">
-        <span class="card__n">06</span><span class="card__t">Laptop refurbishing</span>
+      <li><a class="card" href="https://virgilciociu.github.io/tvglobe/" target="_blank" rel="noopener" data-name="TV Globe" data-src="image/tvglobe-1280.webp">
+        <img width="1280" height="614" src="image/tvglobe-1280.webp" srcset="image/tvglobe-640.webp 640w, image/tvglobe-1280.webp 1280w" sizes="(max-width: 700px) 100vw, 460px" alt="Screenshot: TV Globe" loading="lazy" decoding="async">
+        <span class="card__n">06</span><span class="card__t">TV Globe</span>
       </a></li>
-      <li><a class="card" href="https://virgilciociu.github.io/click-cyber-net/" target="_blank" rel="noopener" data-name="Click Cyber Net" data-src="image/click-cyber-net-1280.webp">
-        <img width="1280" height="614" src="image/click-cyber-net-1280.webp" srcset="image/click-cyber-net-640.webp 640w, image/click-cyber-net-1280.webp 1280w" sizes="(max-width: 700px) 100vw, 460px" alt="Screenshot: Click Cyber Net" loading="lazy" decoding="async">
-        <span class="card__n">07</span><span class="card__t">Click Cyber Net</span>
-      </a></li>
-      <li><a class="card" href="https://virgilciociu.github.io/ogmp3/" target="_blank" rel="noopener" data-name="OGMP3" data-src="image/ogmp3-1280.webp">
-        <img width="1280" height="614" src="image/ogmp3-1280.webp" srcset="image/ogmp3-640.webp 640w, image/ogmp3-1280.webp 1280w" sizes="(max-width: 700px) 100vw, 460px" alt="Screenshot: OGMP3" loading="lazy" decoding="async">
-        <span class="card__n">08</span><span class="card__t">OGMP3</span>
-      </a></li>
-      <li><a class="card" href="https://virgilciociu.github.io/youtubetomp3/" target="_blank" rel="noopener" data-name="YouTube to MP3" data-src="image/youtubetomp3-1280.webp">
-        <img width="1280" height="614" src="image/youtubetomp3-1280.webp" srcset="image/youtubetomp3-640.webp 640w, image/youtubetomp3-1280.webp 1280w" sizes="(max-width: 700px) 100vw, 460px" alt="Screenshot: YouTube to MP3" loading="lazy" decoding="async">
-        <span class="card__n">09</span><span class="card__t">YouTube to MP3</span>
-      </a></li>
-      <li><a class="card" href="https://virgilciociu.github.io/freewebsite/" target="_blank" rel="noopener" data-name="Free Website" data-src="image/freewebsite-1280.webp">
-        <img width="1280" height="614" src="image/freewebsite-1280.webp" srcset="image/freewebsite-640.webp 640w, image/freewebsite-1280.webp 1280w" sizes="(max-width: 700px) 100vw, 460px" alt="Screenshot: Free Website" loading="lazy" decoding="async">
-        <span class="card__n">10</span><span class="card__t">Free Website</span>
-      </a></li>
-      <li><a class="card" href="https://virgilciociu.github.io/freewebsitever2/" target="_blank" rel="noopener" data-name="WebCraft Studio" data-src="image/freewebsitever2-1280.webp">
-        <img width="1280" height="614" src="image/freewebsitever2-1280.webp" srcset="image/freewebsitever2-640.webp 640w, image/freewebsitever2-1280.webp 1280w" sizes="(max-width: 700px) 100vw, 460px" alt="Screenshot: WebCraft Studio" loading="lazy" decoding="async">
-        <span class="card__n">11</span><span class="card__t">WebCraft Studio</span>
-      </a></li>
-      <li><a class="card" href="https://virgilciociu.github.io/recovery/" target="_blank" rel="noopener" data-name="DSC Recovery" data-src="image/recovery-1280.webp">
-        <img width="1280" height="614" src="image/recovery-1280.webp" srcset="image/recovery-640.webp 640w, image/recovery-1280.webp 1280w" sizes="(max-width: 700px) 100vw, 460px" alt="Screenshot: DSC Recovery" loading="lazy" decoding="async">
-        <span class="card__n">12</span><span class="card__t">DSC Recovery</span>
-      </a></li>
-      <li><a class="card" href="https://virgilciociu.github.io/restaurant/" target="_blank" rel="noopener" data-name="Restaurant Siegrid" data-src="image/restaurant-1280.webp">
-        <img width="1280" height="614" src="image/restaurant-1280.webp" srcset="image/restaurant-640.webp 640w, image/restaurant-1280.webp 1280w" sizes="(max-width: 700px) 100vw, 460px" alt="Screenshot: Restaurant Siegrid" loading="lazy" decoding="async">
-        <span class="card__n">13</span><span class="card__t">Restaurant Siegrid</span>
-      </a></li>
-      <li><a class="card" href="https://virgilciociu.github.io/cv/" target="_blank" rel="noopener" data-name="Virgil Ciociu CV" data-src="image/cv-1280.webp">
-        <img width="1280" height="614" src="image/cv-1280.webp" srcset="image/cv-640.webp 640w, image/cv-1280.webp 1280w" sizes="(max-width: 700px) 100vw, 460px" alt="Screenshot: Virgil Ciociu CV" loading="lazy" decoding="async">
-        <span class="card__n">14</span><span class="card__t">Virgil Ciociu CV</span>
-      </a></li>
-      <li><a class="card" href="https://virgilciociu.github.io/ELMcoin/" target="_blank" rel="noopener" data-name="ELM Coin" data-src="image/elmcoin-1280.webp">
-        <img width="1280" height="614" src="image/elmcoin-1280.webp" srcset="image/elmcoin-640.webp 640w, image/elmcoin-1280.webp 1280w" sizes="(max-width: 700px) 100vw, 460px" alt="Screenshot: ELM Coin" loading="lazy" decoding="async">
-        <span class="card__n">15</span><span class="card__t">ELM Coin</span>
-      </a></li>
-      <li><a class="card" href="https://virgilciociu.github.io/tvglobe/" target="_blank" rel="noopener" data-name="Globe TV" data-src="image/tvglobe-1280.webp">
-        <img width="1280" height="614" src="image/tvglobe-1280.webp" srcset="image/tvglobe-640.webp 640w, image/tvglobe-1280.webp 1280w" sizes="(max-width: 700px) 100vw, 460px" alt="Screenshot: Globe TV" loading="lazy" decoding="async">
-        <span class="card__n">16</span><span class="card__t">Globe TV</span>
+      <li><a class="card" href="https://virgilciociu.github.io/portofoliu/experience.html" target="_blank" rel="noopener" data-name="Virgil C Portfolio" data-src="image/portofoliu-1280.webp">
+        <img width="1280" height="614" src="image/portofoliu-1280.webp" srcset="image/portofoliu-640.webp 640w, image/portofoliu-1280.webp 1280w" sizes="(max-width: 700px) 100vw, 460px" alt="Screenshot: Virgil C Portfolio" loading="lazy" decoding="async">
+        <span class="card__n">07</span><span class="card__t">Virgil C Portfolio</span>
       </a></li>
     </ul>
 
@@ -121,6 +85,6 @@
 <div class="loader" id="loader" hidden><span id="loaderText">Loading 3D gallery&hellip;</span></div>
 <script src="js/common.js"></script>
 <script src="js/vendor/gsap.min.js"></script>
-<script src="js/experience.js?v=3"></script>
+<script src="js/experience.js?v=4"></script>
 </body>
 </html>
